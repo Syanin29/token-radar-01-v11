@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Token Radar — 198 pre-token protocols ranked, 40 watchlist, fitted pricing from 119 peers — held out 5-fold x2.98, walk-forward x2.92</title>
+<link rel="stylesheet" href="app.css">
+<script>
+  // Theme before first paint (v6 dark mode): a #theme=dark/light hash wins,
+  // else the stored choice, else light — so the page never flashes the
+  // wrong theme on load.
+  try {
+    var __m = /[#&]theme=(dark|light)/.exec(location.hash);
+    var __t = __m ? __m[1] : localStorage.getItem('token-radar-theme');
+    if (__t === 'dark') document.documentElement.dataset.theme = 'dark';
+  } catch (e) { /* storage unavailable: stay light */ }
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><svg class="radar-mark" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="1.8" fill="currentColor"/><path d="M10 1.5v3M10 15.5v3M1.5 10h3M15.5 10h3" stroke="currentColor" stroke-width="1.4"/></svg><strong>Token Radar</strong></div>
+  <div class="topmeta" id="topmeta"></div>
+  <button id="theme-toggle" type="button" aria-pressed="false" title="Switch between light and dark mode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg><span class="theme-label">Dark mode</span></button>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1 id="h1">198 pre-token protocols ranked, 40 watchlist, fitted pricing from 119 peers — held out 5-fold x2.98, walk-forward x2.92</h1>
+      <p class="lede" id="lede"></p>
+    </div>
+    <dl class="stats" id="stats"></dl>
+  </section>
+  <section class="accounting" id="accounting" aria-label="Protocol accounting"></section>
+  <section class="evidence" id="evidence" aria-label="Out-of-sample evidence"></section>
+  <p class="integrity" id="integrity"></p>
+  <section class="controls">
+    <label>Search
+      <input id="q" type="search" placeholder="Search the board" autocomplete="off">
+    </label>
+    <label>Category
+      <select id="cat"><option value="">All categories</option></select>
+    </label>
+    <label>Chain
+      <select id="chain"><option value="">All chains</option></select>
+    </label>
+    <label>TVL range
+      <select id="tvl">
+        <option value="">Any TVL</option>
+        <option value="big">At least $500M</option>
+        <option value="mid">$50M to $500M</option>
+        <option value="small">Below $50M</option>
+      </select>
+    </label>
+    <label class="check"><input id="watch" type="checkbox"> Watchlist only</label>
+  </section>
+  <section class="controls controls2">
+    <label>Sort
+      <select id="sort">
+        <option value="rank">Rank (implied value)</option>
+        <option value="change_7d">Fastest growing (7d change)</option>
+        <option value="implied_value_usd">Implied value</option>
+        <option value="tvl_delta">Biggest model lift (Δ vs TVL)</option>
+        <option value="launch_odds">Highest launch odds</option>
+        <option value="tvl_usd">TVL</option>
+        <option value="age_days">Youngest first</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </label>
+    <label class="check"><input id="fresh" type="checkbox"> Fresh only (listed &lt; 90 days)</label>
+    <label class="check"><input id="big" type="checkbox"> Biggest calls only (|Δ| ≥ 50)</label>
+  </section>
+  <p class="count" id="count"></p>
+  <div class="tablewrap">
+    <table id="board">
+      <thead>
+        <tr>
+          <th data-sort="rank">Rank</th>
+          <th data-sort="name">Protocol</th>
+          <th data-sort="tvl_usd">TVL</th>
+          <th data-sort="change_7d">7d</th>
+          <th data-sort="age_days">Age</th>
+          <th data-sort="implied_value_usd">Implied value</th>
+          <th data-sort="tvl_delta" title="Model rank minus TVL-only rank: how far the model lifts or drops this protocol versus a plain TVL sort">Δ vs TVL</th>
+          <th title="80% band: the range the true value plausibly sits in, from the model's cross-validated errors — the same width for every row, because the data supports no per-row width">80% band</th>
+          <th data-sort="launch_odds">Odds</th>
+          <th>Board</th>
+          <th data-sort="farm_net_per_hour_usd" title="Farm verdict at a standard farm: deposit 0.02% of TVL ($100–$25,000) for 180 days, 7% drop share — expected drop minus gas, over the plan's own hours">Verdict</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="empty" id="empty" hidden>No protocol on the board matches this filter.</p>
+  </div>
+  <section class="method" id="method"></section>
+  <section class="charts" id="charts"></section>
+  <section class="biggest" id="biggest">
+    <div class="chart-card wide"><h3>Model's biggest calls</h3>
+    <p class="chart-note" id="biggest-note"></p>
+    <div id="biggest-scatter"></div>
+    <div class="calls-grid" id="biggest-tables"></div></div>
+  </section>
+  <section class="odds" id="odds"></section>
+  <footer class="foot" id="foot"></footer>
+</main>
+<aside class="drawer" id="drawer" hidden>
+  <div class="drawer-head">
+    <span id="drawer-rank"></span>
+    <button id="drawer-close" type="button">Close</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

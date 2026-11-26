@@ -1,0 +1,29 @@
+refit-v11-diag run: variant F2, 119 traded peers, 758 protocols, as_of 2026-11-14, features tools/data-features.json
+gates (from features.json): fees peers coverage 84 /144, fees peers119 74 /119, tvl-history peers 118 /119, github board 17 /198
+V0 baseline (frozen: OLS + median fam n/(n+2) + clamp [0.005,2])
+    OOS 5-fold  median x2.9828  p70 x5.7228
+    walk-fwd    median x2.9211  p70 x5.9811  (89 peers, 3 windows)
+    LOO         median x2.8955  p70 x5.2488
+    CPCV        median x2.8664  p70 x4.7189  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, usdd, nonce-capital, onre, upshift, extended-perps
+SANITY V0 reproduces frozen table: PASS
+GATE F2: FAIL
+F2 NEW fees growth + d*log(fees_T30d/fees_prior30d) — DIAGNOSTIC unless coverage gate >=80% passes
+    OOS 5-fold  median x2.9046  p70 x6.0015
+    walk-fwd    median x2.8763  p70 x6.0433  (89 peers, 3 windows)
+    LOO         median x2.8541  p70 x5.5071
+    CPCV        median x2.8255  p70 x5.2357  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, upshift, nonce-capital, extended-perps, usdd, onre
+F2 verdict: DIAGNOSTIC ONLY — coverage gate FAILED (fees peers 84/144 < 115), so this run CANNOT adopt whatever the numbers say. Main gates would be: OOS>=2% yes, all-three yes, overlap<9 no, CPCV<2.8664 yes -> REJECT (gate)
+frozen top-10 (TVL): sentora-curator, steakhouse-financial, gauntlet, veda, usdd, nonce-capital, upshift, bittensor-dtao, polymarket-international, onre
+F2 fitted d on all 119 peers: 0.1744 (v10 reported +0.1744)
+PERMUTATION F2 (200x, seed 20261126, observed lg shuffled among the 72 peers that have it):
+    observed F2 OOS x2.9046 vs frozen x2.9828 = 2.62% better
+    permuted OOS median x2.9931 (p10 x2.8947, p90 x3.1445)
+    p-value (permuted OOS <= observed F2 OOS): 0.120 (24/200)
+    p-value (permuted OOS >= 2% better than frozen): 0.170 (34/200)
+PLATEAU F2 d=0.1395 (0.8x fitted): OOS x2.9036 (2.66% vs frozen), WF x3.0465, LOO x2.8462
+PLATEAU F2 d=0.2093 (1.2x fitted): OOS x2.9062 (2.57% vs frozen), WF x3.0371, LOO x2.8537
+v11 diagnostic done — F2 stays DIAGNOSTIC ONLY (coverage gate failed); see VALIDATION §14.

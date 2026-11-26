@@ -1,0 +1,98 @@
+================ F1 ================
+refit-v10 run: variant F1, 119 traded peers, 758 protocols, as_of 2026-11-14, features tools/data/features.json
+gates (from features.json): fees peers coverage 84 /144, fees peers119 74 /119, tvl-history peers 118 /119, github board 17 /198
+V0 baseline (frozen: OLS + median fam n/(n+2) + clamp [0.005,2])
+    OOS 5-fold  median x2.9828  p70 x5.7228
+    walk-fwd    median x2.9211  p70 x5.9811  (89 peers, 3 windows)
+    LOO         median x2.8955  p70 x5.2488
+    CPCV        median x2.8664  p70 x4.7189  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, usdd, nonce-capital, onre, upshift, extended-perps
+SANITY V0 reproduces frozen table: PASS
+GATE F1: FAIL
+F1 NEW fees level + d*log(fees_T30d) — DIAGNOSTIC unless coverage gate >=80% passes
+    OOS 5-fold  median x3.0091  p70 x5.5841
+    walk-fwd    median x3.1064  p70 x6.0833  (89 peers, 3 windows)
+    LOO         median x2.8980  p70 x5.2504
+    CPCV        median x2.7290  p70 x5.1489  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, usdd, nonce-capital, onre, upshift, extended-perps
+F1 verdict: DIAGNOSTIC ONLY — coverage gate FAILED (fees peers 84/144 < 115), so this run CANNOT adopt whatever the numbers say. Main gates would be: OOS>=2% no, all-three no, overlap<9 no, CPCV<2.8664 yes -> REJECT (gate)
+frozen top-10 (TVL): sentora-curator, steakhouse-financial, gauntlet, veda, usdd, nonce-capital, upshift, bittensor-dtao, polymarket-international, onre
+================ F2 ================
+refit-v10 run: variant F2, 119 traded peers, 758 protocols, as_of 2026-11-14, features tools/data/features.json
+gates (from features.json): fees peers coverage 84 /144, fees peers119 74 /119, tvl-history peers 118 /119, github board 17 /198
+V0 baseline (frozen: OLS + median fam n/(n+2) + clamp [0.005,2])
+    OOS 5-fold  median x2.9828  p70 x5.7228
+    walk-fwd    median x2.9211  p70 x5.9811  (89 peers, 3 windows)
+    LOO         median x2.8955  p70 x5.2488
+    CPCV        median x2.8664  p70 x4.7189  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, usdd, nonce-capital, onre, upshift, extended-perps
+SANITY V0 reproduces frozen table: PASS
+GATE F2: FAIL
+F2 NEW fees growth + d*log(fees_T30d/fees_prior30d) — DIAGNOSTIC unless coverage gate >=80% passes
+    OOS 5-fold  median x2.9046  p70 x6.0015
+    walk-fwd    median x2.8763  p70 x6.0433  (89 peers, 3 windows)
+    LOO         median x2.8541  p70 x5.5071
+    CPCV        median x2.8255  p70 x5.2357  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, upshift, nonce-capital, extended-perps, usdd, onre
+F2 verdict: DIAGNOSTIC ONLY — coverage gate FAILED (fees peers 84/144 < 115), so this run CANNOT adopt whatever the numbers say. Main gates would be: OOS>=2% yes, all-three yes, overlap<9 no, CPCV<2.8664 yes -> REJECT (gate)
+frozen top-10 (TVL): sentora-curator, steakhouse-financial, gauntlet, veda, usdd, nonce-capital, upshift, bittensor-dtao, polymarket-international, onre
+================ M1 ================
+refit-v10 run: variant M1, 119 traded peers, 758 protocols, as_of 2026-11-14, features tools/data/features.json
+gates (from features.json): fees peers coverage 84 /144, fees peers119 74 /119, tvl-history peers 118 /119, github board 17 /198
+V0 baseline (frozen: OLS + median fam n/(n+2) + clamp [0.005,2])
+    OOS 5-fold  median x2.9828  p70 x5.7228
+    walk-fwd    median x2.9211  p70 x5.9811  (89 peers, 3 windows)
+    LOO         median x2.8955  p70 x5.2488
+    CPCV        median x2.8664  p70 x4.7189  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, usdd, nonce-capital, onre, upshift, extended-perps
+SANITY V0 reproduces frozen table: PASS
+GATE M1: PASS
+M1 NEW TVL momentum 30d + d*mom30
+    OOS 5-fold  median x3.0358  p70 x5.8264
+    walk-fwd    median x2.8865  p70 x6.1288  (89 peers, 3 windows)
+    LOO         median x2.9299  p70 x5.3953
+    CPCV        median x2.9545  p70 x4.8017  (89 peers, 4 paths)
+    TVL top-10 overlap 8/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, veda, gauntlet, usdd, nonce-capital, onre, extended-perps, opentrade
+M1 verdict: main gates FAIL (OOS>=2% no, all-three no, overlap<9 yes, CPCV worse/equal) -> REJECT
+frozen top-10 (TVL): sentora-curator, steakhouse-financial, gauntlet, veda, usdd, nonce-capital, upshift, bittensor-dtao, polymarket-international, onre
+================ M2 ================
+refit-v10 run: variant M2, 119 traded peers, 758 protocols, as_of 2026-11-14, features tools/data/features.json
+gates (from features.json): fees peers coverage 84 /144, fees peers119 74 /119, tvl-history peers 118 /119, github board 17 /198
+V0 baseline (frozen: OLS + median fam n/(n+2) + clamp [0.005,2])
+    OOS 5-fold  median x2.9828  p70 x5.7228
+    walk-fwd    median x2.9211  p70 x5.9811  (89 peers, 3 windows)
+    LOO         median x2.8955  p70 x5.2488
+    CPCV        median x2.8664  p70 x4.7189  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, usdd, nonce-capital, onre, upshift, extended-perps
+SANITY V0 reproduces frozen table: PASS
+GATE M2: PASS
+M2 NEW TVL momentum 90d + d*mom90
+    OOS 5-fold  median x3.1786  p70 x6.0140
+    walk-fwd    median x3.2993  p70 x6.1698  (89 peers, 3 windows)
+    LOO         median x3.1007  p70 x5.4311
+    CPCV        median x2.9917  p70 x5.1725  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: steakhouse-financial, bittensor-dtao, sentora-curator, gauntlet, veda, usdd, nonce-capital, extended-perps, upshift, onre
+M2 verdict: main gates FAIL (OOS>=2% no, all-three no, overlap<9 no, CPCV worse/equal) -> REJECT
+frozen top-10 (TVL): sentora-curator, steakhouse-financial, gauntlet, veda, usdd, nonce-capital, upshift, bittensor-dtao, polymarket-international, onre
+================ G1 ================
+refit-v10 run: variant G1, 119 traded peers, 758 protocols, as_of 2026-11-14, features tools/data/features.json
+gates (from features.json): fees peers coverage 84 /144, fees peers119 74 /119, tvl-history peers 118 /119, github board 17 /198
+V0 baseline (frozen: OLS + median fam n/(n+2) + clamp [0.005,2])
+    OOS 5-fold  median x2.9828  p70 x5.7228
+    walk-fwd    median x2.9211  p70 x5.9811  (89 peers, 3 windows)
+    LOO         median x2.8955  p70 x5.2488
+    CPCV        median x2.8664  p70 x4.7189  (89 peers, 4 paths)
+    TVL top-10 overlap 9/10
+    model top-10: sentora-curator, steakhouse-financial, bittensor-dtao, gauntlet, veda, usdd, nonce-capital, onre, upshift, extended-perps
+SANITY V0 reproduces frozen table: PASS
+GATE G1: FAIL
+G1 verdict: GATE-REJECT — board GitHub coverage < 50%; NO RUN performed (no GitHub API calls made).
+frozen top-10 (TVL): sentora-curator, steakhouse-financial, gauntlet, veda, usdd, nonce-capital, upshift, bittensor-dtao, polymarket-international, onre
